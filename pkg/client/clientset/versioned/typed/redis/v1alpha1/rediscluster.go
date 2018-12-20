@@ -56,7 +56,7 @@ type redisClusters struct {
 }
 
 // newRedisClusters returns a RedisClusters
-func newRedisClusters(c *SamplecontrollerV1alpha1Client, namespace string) *redisClusters {
+func newRedisClusters(c *RedisV1alpha1Client, namespace string) *redisClusters {
 	return &redisClusters{
 		client: c.RESTClient(),
 		ns:     namespace,

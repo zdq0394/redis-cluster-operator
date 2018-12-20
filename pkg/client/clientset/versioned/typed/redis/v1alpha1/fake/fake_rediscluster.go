@@ -30,13 +30,13 @@ import (
 
 // FakeRedisClusters implements RedisClusterInterface
 type FakeRedisClusters struct {
-	Fake *FakeSamplecontrollerV1alpha1
+	Fake *FakeRedisV1alpha1
 	ns   string
 }
 
-var redisclustersResource = schema.GroupVersionResource{Group: "samplecontroller.k8s.io", Version: "v1alpha1", Resource: "redisclusters"}
+var redisclustersResource = schema.GroupVersionResource{Group: "redis.zdq0394.io", Version: "v1alpha1", Resource: "redisclusters"}
 
-var redisclustersKind = schema.GroupVersionKind{Group: "samplecontroller.k8s.io", Version: "v1alpha1", Kind: "RedisCluster"}
+var redisclustersKind = schema.GroupVersionKind{Group: "redis.zdq0394.io", Version: "v1alpha1", Kind: "RedisCluster"}
 
 // Get takes name of the redisCluster, and returns the corresponding redisCluster object, and an error if there is any.
 func (c *FakeRedisClusters) Get(name string, options v1.GetOptions) (result *v1alpha1.RedisCluster, err error) {

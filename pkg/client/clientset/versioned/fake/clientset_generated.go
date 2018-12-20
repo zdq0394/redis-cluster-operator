@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned"
-	samplecontrollerv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned/typed/redis/v1alpha1"
-	fakesamplecontrollerv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned/typed/redis/v1alpha1/fake"
+	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned/typed/redis/v1alpha1"
+	fakeredisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned/typed/redis/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -71,12 +71,12 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// SamplecontrollerV1alpha1 retrieves the SamplecontrollerV1alpha1Client
-func (c *Clientset) SamplecontrollerV1alpha1() samplecontrollerv1alpha1.SamplecontrollerV1alpha1Interface {
-	return &fakesamplecontrollerv1alpha1.FakeSamplecontrollerV1alpha1{Fake: &c.Fake}
+// RedisV1alpha1 retrieves the RedisV1alpha1Client
+func (c *Clientset) RedisV1alpha1() redisv1alpha1.RedisV1alpha1Interface {
+	return &fakeredisv1alpha1.FakeRedisV1alpha1{Fake: &c.Fake}
 }
 
-// Samplecontroller retrieves the SamplecontrollerV1alpha1Client
-func (c *Clientset) Samplecontroller() samplecontrollerv1alpha1.SamplecontrollerV1alpha1Interface {
-	return &fakesamplecontrollerv1alpha1.FakeSamplecontrollerV1alpha1{Fake: &c.Fake}
+// Redis retrieves the RedisV1alpha1Client
+func (c *Clientset) Redis() redisv1alpha1.RedisV1alpha1Interface {
+	return &fakeredisv1alpha1.FakeRedisV1alpha1{Fake: &c.Fake}
 }

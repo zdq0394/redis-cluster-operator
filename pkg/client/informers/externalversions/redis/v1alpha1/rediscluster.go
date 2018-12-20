@@ -61,13 +61,13 @@ func NewFilteredRedisClusterInformer(client versioned.Interface, namespace strin
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SamplecontrollerV1alpha1().RedisClusters(namespace).List(options)
+				return client.RedisV1alpha1().RedisClusters(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SamplecontrollerV1alpha1().RedisClusters(namespace).Watch(options)
+				return client.RedisV1alpha1().RedisClusters(namespace).Watch(options)
 			},
 		},
 		&redisv1alpha1.RedisCluster{},

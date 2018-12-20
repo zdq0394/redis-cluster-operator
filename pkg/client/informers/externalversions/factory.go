@@ -172,9 +172,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Samplecontroller() redis.Interface
+	Redis() redis.Interface
 }
 
-func (f *sharedInformerFactory) Samplecontroller() redis.Interface {
+func (f *sharedInformerFactory) Redis() redis.Interface {
 	return redis.New(f, f.namespace, f.tweakListOptions)
 }
