@@ -4,8 +4,8 @@ import (
 	apiextensionscli "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/kubernetes"
 
-	redisfailoverclientset "github.com/spotahome/redis-operator/client/k8s/clientset/versioned"
-	"github.com/spotahome/redis-operator/log"
+	"github.com/zdq0394/redis-cluster-operator/log"
+	redisclusterclientset "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned"
 )
 
 // Service is the K8s service entrypoint.
@@ -14,7 +14,7 @@ type Services interface {
 	ConfigMap
 	Pod
 	PodDisruptionBudget
-	RedisFailover
+	RedisCluster
 	Service
 	RBAC
 	Deployment
@@ -26,7 +26,7 @@ type services struct {
 	ConfigMap
 	Pod
 	PodDisruptionBudget
-	RedisFailover
+	RedisCluster
 	Service
 	RBAC
 	Deployment
@@ -34,13 +34,13 @@ type services struct {
 }
 
 // New returns a new Kubernetes service.
-func New(kubecli kubernetes.Interface, crdcli redisfailoverclientset.Interface, apiextcli apiextensionscli.Interface, logger log.Logger) Services {
+func New(kubecli kubernetes.Interface, crdcli redisclusterclientset.Interface, apiextcli apiextensionscli.Interface, logger log.Logger) Services {
 	return &services{
-		CRD:                 NewCRDService(apiextcli, logger),
+		CRD:                 NewCRDService(apiextcli),
 		ConfigMap:           NewConfigMapService(kubecli, logger),
 		Pod:                 NewPodService(kubecli, logger),
 		PodDisruptionBudget: NewPodDisruptionBudgetService(kubecli, logger),
-		RedisFailover:       NewRedisFailoverService(crdcli, logger),
+		RedisCluster:        NewRedisClusterService(crdcli, logger),
 		Service:             NewServiceService(kubecli, logger),
 		RBAC:                NewRBACService(kubecli, logger),
 		Deployment:          NewDeploymentService(kubecli, logger),
