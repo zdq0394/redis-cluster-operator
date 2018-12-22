@@ -36,7 +36,7 @@ type services struct {
 // New returns a new Kubernetes service.
 func New(kubecli kubernetes.Interface, crdcli redisclusterclientset.Interface, apiextcli apiextensionscli.Interface, logger log.Logger) Services {
 	return &services{
-		CRD:                 NewCRDService(apiextcli),
+		CRD:                 NewCRDService(apiextcli, logger),
 		ConfigMap:           NewConfigMapService(kubecli, logger),
 		Pod:                 NewPodService(kubecli, logger),
 		PodDisruptionBudget: NewPodDisruptionBudgetService(kubecli, logger),
