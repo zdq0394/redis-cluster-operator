@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	k8sclient "github.com/zdq0394/redis-cluster-operator/client/k8s"
 	"github.com/zdq0394/redis-cluster-operator/log"
 	"github.com/zdq0394/redis-cluster-operator/operator/controller"
 	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster"
+	k8sclient "github.com/zdq0394/redis-cluster-operator/pkg/k8s"
 	k8service "github.com/zdq0394/redis-cluster-operator/service/k8s"
 )
 

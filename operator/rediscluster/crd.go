@@ -1,8 +1,8 @@
 package rediscluster
 
 import (
-	"github.com/zdq0394/redis-cluster-operator/client/crd"
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
+	"github.com/zdq0394/redis-cluster-operator/pkg/operator/crd"
 	"github.com/zdq0394/redis-cluster-operator/service/k8s"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
