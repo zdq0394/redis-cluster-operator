@@ -2,7 +2,7 @@ package cluster
 
 import (
 	"github.com/urfave/cli"
-	"github.com/zdq0394/redis-cluster-operator/operator"
+	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster"
 )
 
 // Flags of sub command `cluster`
@@ -27,7 +27,7 @@ func init() {
 func Action(ctx *cli.Context) {
 	develop := ctx.Bool("develop")
 	kubeconfig := ctx.String("kubeconfig")
-	operator.Start(develop, kubeconfig)
+	rediscluster.Start(develop, kubeconfig)
 }
 
 // Command Cluster Sub Command
