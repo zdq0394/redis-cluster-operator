@@ -34,13 +34,39 @@ type RedisCluster struct {
 
 // RedisClusterSpec is the spec for a RedisCluster resource
 type RedisClusterSpec struct {
-	DeploymentName string `json:"deploymentName"`
-	Replicas       *int32 `json:"replicas"`
+	Redis RedisSetting `json:"redis"`
+}
+
+// CPUAndMem defines how many cpu and ram the container will request/limit
+type CPUAndMem struct {
+	CPU    string `json:"cpu"`
+	Memory string `json:"memory"`
+}
+
+// RedisResources sets the limits and requests for a container
+type RedisResources struct {
+	Requests CPUAndMem `json:"requests,omitempty"`
+	Limits   CPUAndMem `json:"limits,omitempty"`
+}
+
+type RedisSetting struct {
+	Replicas  int32          `json:"replicas,omitempty"`
+	Resources RedisResources `json:"resources,omitempty"`
+	Image     string         `json:"image,omitempty"`
 }
 
 // RedisClusterStatus is the status for a RedisCluster resource
 type RedisClusterStatus struct {
-	AvailableReplicas int32 `json:"availableReplicas"`
+	AvailableReplicas int32           `json:"availableReplicas"`
+	Instances         []RedisInstance `json:"instances"`
+}
+
+// RedisInstance is the instance running.
+type RedisInstance struct {
+	Role          string
+	IP            string
+	Port          string
+	ClusterNodeID string
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
