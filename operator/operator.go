@@ -5,9 +5,9 @@ import (
 	"sync"
 
 	"github.com/zdq0394/redis-cluster-operator/log"
-	"github.com/zdq0394/redis-cluster-operator/operator/controller"
 	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster"
 	k8sclient "github.com/zdq0394/redis-cluster-operator/pkg/k8s"
+	"github.com/zdq0394/redis-cluster-operator/pkg/operator/controller"
 	k8service "github.com/zdq0394/redis-cluster-operator/service/k8s"
 )
 
@@ -20,7 +20,7 @@ type Operator interface {
 }
 
 type simpleOperator struct {
-	crd         rediscluster.RedisClusterCRD
+	crd         *rediscluster.RedisClusterCRD
 	controller  controller.Controller
 	initialized bool
 	running     bool
@@ -28,7 +28,7 @@ type simpleOperator struct {
 }
 
 // NewSimpleOperator create new instance of SimpleOperator.
-func NewSimpleOperator(crd rediscluster.RedisClusterCRD, ctrl controller.Controller) Operator {
+func NewSimpleOperator(crd *rediscluster.RedisClusterCRD, ctrl controller.Controller) Operator {
 	return &simpleOperator{
 		crd:        crd,
 		controller: ctrl,
@@ -91,8 +91,8 @@ func Start(development bool, kubeconfig string) error {
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := rediscluster.NewRedisClusterCRD(kubeService)
 	redisClusterHandler := rediscluster.NewRedisClusterHandler()
-	ctrl := controller.NewSimpleController(*crd, redisClusterHandler)
-	optor := NewSimpleOperator(*crd, ctrl)
+	ctrl := controller.NewSimpleController(crd, redisClusterHandler)
+	optor := NewSimpleOperator(crd, ctrl)
 	stopC := make(chan struct{}, 0)
 	optor.Run(stopC)
 	return nil

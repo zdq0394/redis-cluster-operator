@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster"
 	objectRuntime "k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -20,16 +19,29 @@ type Controller interface {
 	Run(stopper <-chan struct{}) error
 }
 
+// CRD is the custom resource definition.
+type CRD interface {
+	GetListerWatcher() cache.ListerWatcher
+	GetObject() objectRuntime.Object
+	Initialize() error
+}
+
+// Handler knows how to handle the received resources from a kubernetes cluster.
+type Handler interface {
+	Add(objectRuntime.Object) error
+	Delete(string) error
+}
+
 // SimpleController implements Controller interface
 type SimpleController struct {
 	indexer  cache.Indexer
 	queue    workqueue.RateLimitingInterface
 	informer cache.Controller
-	handler  *rediscluster.RedisClusterHandler
+	handler  Handler
 }
 
 // NewSimpleController create an instance of Controller
-func NewSimpleController(watchedCRD rediscluster.RedisClusterCRD, handler *rediscluster.RedisClusterHandler) Controller {
+func NewSimpleController(watchedCRD CRD, handler Handler) Controller {
 	// queue
 	queue := workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())
 
