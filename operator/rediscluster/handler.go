@@ -29,9 +29,9 @@ func (h *RedisClusterHandler) Add(obj runtime.Object) error {
 
 // Delete process the logic when a RedisClusterCRD object deleted.
 // Destroy the redis cluster.
-func (h *RedisClusterHandler) Delete(obj runtime.Object) error {
+func (h *RedisClusterHandler) Delete(key string) error {
 	// Delete Redis Cluster
-	fmt.Println("Delete RedisCluster Here...")
+	fmt.Println("Delete RedisCluster Here:", key)
 	return nil
 }
 

@@ -90,7 +90,7 @@ func (c *SimpleController) processWatchedResource(key string) error {
 		return err
 	}
 	if !exists {
-		return c.handler.Delete(obj.(objectRuntime.Object))
+		return c.handler.Delete(key)
 	}
 	return c.handler.Add(obj.(objectRuntime.Object))
 }
