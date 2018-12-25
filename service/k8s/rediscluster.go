@@ -22,7 +22,7 @@ type RedisClusterService struct {
 
 // NewRedisClusterService returns a new Workspace KubeService.
 func NewRedisClusterService(crdcli redisclusterclientset.Interface, logger log.Logger) *RedisClusterService {
-	logger = logger.With("service", "k8s.redisfailover")
+	logger = logger.With("service", "k8s.rediscluster")
 	return &RedisClusterService{
 		crdClient: crdcli,
 		logger:    logger,

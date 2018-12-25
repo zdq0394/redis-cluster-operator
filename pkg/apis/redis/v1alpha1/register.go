@@ -28,7 +28,7 @@ import (
 const (
 	version      = "v1alpha1"
 	RCKind       = "RedisCluster"
-	RCNamePlural = "rediscluster"
+	RCNamePlural = "redisclusters"
 	RCScope      = apiextensionsv1beta1.NamespaceScoped
 )
 
