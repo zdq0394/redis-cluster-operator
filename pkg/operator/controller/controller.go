@@ -84,6 +84,7 @@ func NewSimpleController(cfg *Config, watchedCRD CRD, handler Handler) Controlle
 		indexer:  indexer,
 		queue:    queue,
 		handler:  handler,
+		cfg:      cfg,
 	}
 }
 
