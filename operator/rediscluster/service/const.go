@@ -7,3 +7,9 @@ const (
 	redisAccessPort     = 6379
 	redisAccessPortName = "redis-port"
 )
+
+const (
+	serviceHeadlessNamePrefix = "h"
+	serviceAccessNamePrefix   = "a"
+	statefulsetNamePrefix     = "s"
+)

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -9,7 +11,7 @@ import (
 
 func generateRedisAccessService(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) *corev1.Service {
-	name := rc.Name
+	name := generateName(serviceAccessNamePrefix, rc.Name)
 	namespace := rc.Namespace
 
 	return &corev1.Service{
@@ -38,7 +40,7 @@ func generateRedisAccessService(rc *redisv1alpha1.RedisCluster,
 func generateRedisHeadlessService(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) *corev1.Service {
 
-	name := rc.Name
+	name := generateName(serviceHeadlessNamePrefix, rc.Name)
 	namespace := rc.Namespace
 
 	return &corev1.Service{
@@ -61,4 +63,8 @@ func generateRedisHeadlessService(rc *redisv1alpha1.RedisCluster,
 			Selector: labels,
 		},
 	}
+}
+
+func generateName(prefix, name string) string {
+	return fmt.Sprintf("%s_%s", prefix, name)
 }
