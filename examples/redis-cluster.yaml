@@ -1,0 +1,10 @@
+---
+apiVersion: redis.zdq0394.io/v1alpha1
+kind: RedisCluster
+metadata:
+    name: myrediscluster
+spec:
+    deploymentName: hello-myrediscluster
+    replicas: 8
+
+    
