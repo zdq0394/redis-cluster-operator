@@ -1,6 +1,7 @@
 package rediscluster
 
 import (
+	"context"
 	"fmt"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,7 +22,7 @@ func NewRedisClusterHandler() *RedisClusterHandler {
 
 // Add process the logic when a RedisClusterCRD object created/updated
 // Create or update a redis cluster as RedisClusterCRD desired.
-func (h *RedisClusterHandler) Add(obj runtime.Object) error {
+func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error {
 	// Create RedisCluster Here...
 	fmt.Println("Create RedisCluster Here...")
 	return nil
@@ -29,7 +30,7 @@ func (h *RedisClusterHandler) Add(obj runtime.Object) error {
 
 // Delete process the logic when a RedisClusterCRD object deleted.
 // Destroy the redis cluster.
-func (h *RedisClusterHandler) Delete(key string) error {
+func (h *RedisClusterHandler) Delete(ctx context.Context, key string) error {
 	// Delete Redis Cluster
 	fmt.Println("Delete RedisCluster Here:", key)
 	return nil

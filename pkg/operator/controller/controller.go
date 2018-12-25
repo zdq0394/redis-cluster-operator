@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -28,8 +29,8 @@ type CRD interface {
 
 // Handler knows how to handle the received resources from a kubernetes cluster.
 type Handler interface {
-	Add(objectRuntime.Object) error
-	Delete(string) error
+	Add(context.Context, objectRuntime.Object) error
+	Delete(context.Context, string) error
 }
 
 // SimpleController implements Controller interface
@@ -91,20 +92,20 @@ func (c *SimpleController) processNextItem() bool {
 	}
 	defer c.queue.Done(key)
 
-	err := c.processWatchedResource(key.(string))
+	err := c.processWatchedResource(context.Background(), key.(string))
 	c.handleErr(err, key)
 	return true
 }
 
-func (c *SimpleController) processWatchedResource(key string) error {
+func (c *SimpleController) processWatchedResource(ctx context.Context, key string) error {
 	obj, exists, err := c.indexer.GetByKey(key)
 	if err != nil {
 		return err
 	}
 	if !exists {
-		return c.handler.Delete(key)
+		return c.handler.Delete(ctx, key)
 	}
-	return c.handler.Add(obj.(objectRuntime.Object))
+	return c.handler.Add(ctx, obj.(objectRuntime.Object))
 }
 
 func (c *SimpleController) runWorker() {
