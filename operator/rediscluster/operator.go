@@ -14,8 +14,11 @@ func Start(development bool, kubeconfig string) error {
 	logger := log.Base()
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := NewRedisClusterCRD(kubeService)
-	redisClusterHandler := NewRedisClusterHandler()
-	ctrl := controller.NewSimpleController(crd, redisClusterHandler)
+	handler := NewRedisClusterHandler()
+
+	cfg := &controller.Config{}
+	cfg.Name = "Redis Cluster Controller"
+	ctrl := controller.NewSimpleController(cfg, crd, handler)
 	optor := operator.NewSimpleOperator(crd, ctrl)
 	stopC := make(chan struct{}, 0)
 	optor.Run(stopC)

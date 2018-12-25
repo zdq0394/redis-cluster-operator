@@ -39,10 +39,12 @@ type SimpleController struct {
 	queue    workqueue.RateLimitingInterface
 	informer cache.Controller
 	handler  Handler
+	cfg      *Config
 }
 
 // NewSimpleController create an instance of Controller
-func NewSimpleController(watchedCRD CRD, handler Handler) Controller {
+func NewSimpleController(cfg *Config, watchedCRD CRD, handler Handler) Controller {
+	cfg.setDefaults()
 	// queue
 	queue := workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())
 
@@ -135,7 +137,7 @@ func (c *SimpleController) Run(stopper <-chan struct{}) error {
 	defer runtime.HandleCrash()
 
 	defer c.queue.ShutDown()
-	fmt.Printf("Starting controller")
+	fmt.Println(c.cfg.Name, " Starts...")
 
 	go c.informer.Run(stopper)
 
@@ -144,8 +146,7 @@ func (c *SimpleController) Run(stopper <-chan struct{}) error {
 		return nil
 	}
 
-	threadiness := 1
-	for i := 0; i < threadiness; i++ {
+	for i := 0; i < c.cfg.ConcurrentWorkers; i++ {
 		go wait.Until(c.runWorker, time.Second, stopper)
 	}
 
