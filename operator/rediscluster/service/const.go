@@ -9,7 +9,7 @@ const (
 )
 
 const (
-	serviceHeadlessNamePrefix = "h"
-	serviceAccessNamePrefix   = "a"
-	statefulsetNamePrefix     = "s"
+	svcHeadlessNamePrefix = "rch"
+	svcAccessNamePrefix   = "rca"
+	statefulsetNamePrefix = "rcs"
 )
