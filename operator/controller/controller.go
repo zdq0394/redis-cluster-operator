@@ -122,7 +122,7 @@ func (c *SimpleController) Run(stopper <-chan struct{}) error {
 	defer runtime.HandleCrash()
 
 	defer c.queue.ShutDown()
-	fmt.Printf("Starting Pod controller")
+	fmt.Printf("Starting controller")
 
 	go c.informer.Run(stopper)
 
@@ -137,6 +137,6 @@ func (c *SimpleController) Run(stopper <-chan struct{}) error {
 	}
 
 	<-stopper
-	fmt.Printf("Stopping Pod controller")
+	fmt.Printf("Stopping controller")
 	return nil
 }
