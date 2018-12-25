@@ -14,3 +14,6 @@ build:
 	mkdir -p make/release
 	go build -o make/release/redisops github.com/zdq0394/redis-cluster-operator/cmd/operator
 	chmod 775 make/release/redisops
+
+run:
+	make/release/redisops cluster --develop --kubeconfig=/root/.kube/config
