@@ -12,10 +12,8 @@ import (
 )
 
 // LoadKubernetesConfig loads kubernetes configuration based on flags.
-func LoadKubernetesConfig(deployment bool) (*rest.Config, error) {
+func LoadKubernetesConfig(deployment bool, kubeConfig string) (*rest.Config, error) {
 	var cfg *rest.Config
-	// If devel mode then use configuration flag path.
-	kubeConfig := "/etc/kubernetes/kubeconfig"
 	if deployment {
 		config, err := clientcmd.BuildConfigFromFlags("", kubeConfig)
 		if err != nil {
@@ -34,8 +32,8 @@ func LoadKubernetesConfig(deployment bool) (*rest.Config, error) {
 }
 
 // CreateKubernetesClients create the clients to connect to kubernetes
-func CreateKubernetesClients(development bool) (kubernetes.Interface, redisclientset.Interface, apiextensionsclientset.Interface, error) {
-	config, err := LoadKubernetesConfig(development)
+func CreateKubernetesClients(development bool, kubeconfig string) (kubernetes.Interface, redisclientset.Interface, apiextensionsclientset.Interface, error) {
+	config, err := LoadKubernetesConfig(development, kubeconfig)
 	if err != nil {
 		return nil, nil, nil, err
 	}

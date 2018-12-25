@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/urfave/cli"
-	"github.com/zdq0394/redis-cluster-operator/operator"
+	"github.com/zdq0394/redis-cluster-operator/cmd/operator/cluster"
 )
 
 func main() {
@@ -20,30 +20,10 @@ func main() {
 	}
 	app.Flags = []cli.Flag{}
 	app.Commands = []cli.Command{
-		clusterCommand(),
+		cluster.Command(),
 	}
 
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println(err)
 	}
-}
-
-func clusterCommand() cli.Command {
-	return cli.Command{
-		Name:    "cluster",
-		Aliases: []string{"c"},
-		Usage:   "start redis cluster operator",
-		Flags: []cli.Flag{
-			cli.BoolFlag{
-				EnvVar: "DEVELOP",
-				Name:   "develop",
-				Usage:  "start the operator in develop mode",
-			},
-		},
-		Action: clusterAction,
-	}
-}
-
-func clusterAction(ctx *cli.Context) {
-	operator.Start(false)
 }

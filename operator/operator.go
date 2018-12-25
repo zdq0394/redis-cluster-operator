@@ -85,8 +85,8 @@ func (s *simpleOperator) setRunning(value bool) {
 }
 
 // Start the Operator
-func Start(development bool) error {
-	kubeClient, redisClient, aeClient, _ := k8sclient.CreateKubernetesClients(development)
+func Start(development bool, kubeconfig string) error {
+	kubeClient, redisClient, aeClient, _ := k8sclient.CreateKubernetesClients(development, kubeconfig)
 	logger := log.Base()
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := rediscluster.NewRedisClusterCRD(kubeService)
