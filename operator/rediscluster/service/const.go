@@ -12,4 +12,5 @@ const (
 	svcHeadlessNamePrefix = "rch"
 	svcAccessNamePrefix   = "rca"
 	statefulsetNamePrefix = "rcs"
+	configMapNamePrefix   = "rcfg"
 )

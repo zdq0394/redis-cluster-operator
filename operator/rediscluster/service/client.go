@@ -8,8 +8,8 @@ import (
 
 // RedisClusterManager manage redis cluster instance in kubernetes cluster
 type RedisClusterManager interface {
-	EnsureRedisStatefulset(rc *redisv1alpha1.RedisCluster, lables map[string]string, ownerRefs []metav1.OwnerReference) error
 	EnsureRedisConfigMap(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
+	EnsureRedisStatefulset(rc *redisv1alpha1.RedisCluster, lables map[string]string, ownerRefs []metav1.OwnerReference) error
 	EnsureRedisHeadlessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
 	EnsureRedisAcessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
 }
@@ -25,12 +25,14 @@ func NewRedisClusterManager(s k8s.Services) RedisClusterManager {
 	}
 }
 
-func (s *redisKubeClusterManager) EnsureRedisStatefulset(rc *redisv1alpha1.RedisCluster, lables map[string]string, ownerRefs []metav1.OwnerReference) error {
-	return nil
+func (s *redisKubeClusterManager) EnsureRedisConfigMap(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
+	configMap := generateRedisConfigMap(rc, labels, ownerRefs)
+	return s.K8SService.CreateOrUpdateConfigMap(rc.Namespace, configMap)
 }
 
-func (s *redisKubeClusterManager) EnsureRedisConfigMap(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
-	return nil
+func (s *redisKubeClusterManager) EnsureRedisStatefulset(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
+	ss := generateRedisStatefulset(rc, labels, ownerRefs)
+	return s.K8SService.CreateOrUpdateStatefulSet(rc.Namespace, ss)
 }
 
 func (s *redisKubeClusterManager) EnsureRedisHeadlessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
