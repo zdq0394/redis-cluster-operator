@@ -17,3 +17,6 @@ build:
 
 run:
 	make/release/redisops cluster --develop --kubeconfig=/root/.kube/config
+
+clean:
+	rm -f make/release/redisops
