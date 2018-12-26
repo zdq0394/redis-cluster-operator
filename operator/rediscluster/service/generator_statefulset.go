@@ -59,7 +59,7 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 					Volumes: getVolumes(rc),
 				},
 			},
-			volumeClaimTemplates: getVolumeClaimTemplates(rc, labels, ownerRefs),
+			VolumeClaimTemplates: getVolumeClaimTemplates(rc, labels, ownerRefs),
 		},
 	}
 	return ss
