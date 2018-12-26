@@ -17,5 +17,4 @@ const (
 
 var (
 	terminationGracePeriodSeconds int64 = 20
-	storageClassNamePx                  = "px-hdd-ha3"
 )

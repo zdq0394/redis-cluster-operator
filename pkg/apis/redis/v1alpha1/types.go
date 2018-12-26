@@ -49,10 +49,18 @@ type RedisResources struct {
 	Limits   CPUAndMem `json:"limits,omitempty"`
 }
 
+// StorageSpec spec of storage.
+type StorageSpec struct {
+	Size             string `json:"size,omitempty"`
+	StorageClassName string `json:"storageClassName,omitempty"`
+}
+
+// RedisSetting settings of redis
 type RedisSetting struct {
 	Replicas  int32          `json:"replicas,omitempty"`
 	Resources RedisResources `json:"resources,omitempty"`
 	Image     string         `json:"image,omitempty"`
+	Storage   StorageSpec    `json:"storage,omitempty"`
 }
 
 // RedisClusterStatus is the status for a RedisCluster resource

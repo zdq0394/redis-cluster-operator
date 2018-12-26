@@ -16,6 +16,7 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 
 	spec := rc.Spec
 	redisImage := spec.Redis.Image
+	replicas := spec.Redis.Replicas
 
 	ss := &appsv1beta2.StatefulSet{
 		ObjectMeta: metav1.ObjectMeta{
@@ -26,7 +27,7 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 		},
 		Spec: appsv1beta2.StatefulSetSpec{
 			ServiceName: serviceName,
-			Replicas:    &spec.Redis.Replicas,
+			Replicas:    &replicas,
 			UpdateStrategy: appsv1beta2.StatefulSetUpdateStrategy{
 				Type: "RollingUpdate",
 			},
@@ -110,6 +111,8 @@ func getContainerPorts(rc *redisv1alpha1.RedisCluster) []corev1.ContainerPort {
 
 func getVolumeClaimTemplates(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) []corev1.PersistentVolumeClaim {
+	storageSize := rc.Spec.Redis.Storage.Size
+	storageClassName := rc.Spec.Redis.Storage.StorageClassName
 	return []corev1.PersistentVolumeClaim{
 		{
 			ObjectMeta: metav1.ObjectMeta{
@@ -124,10 +127,10 @@ func getVolumeClaimTemplates(rc *redisv1alpha1.RedisCluster,
 				},
 				Resources: corev1.ResourceRequirements{
 					Requests: corev1.ResourceList{
-						corev1.ResourceStorage: resource.MustParse("8Gi"),
+						corev1.ResourceStorage: resource.MustParse(storageSize),
 					},
 				},
-				StorageClassName: &storageClassNamePx,
+				StorageClassName: &storageClassName,
 			},
 		},
 	}
