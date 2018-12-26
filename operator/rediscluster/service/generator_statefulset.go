@@ -66,21 +66,6 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 	return ss
 }
 
-func getVolumes(rc *redisv1alpha1.RedisCluster) []corev1.Volume {
-	return []corev1.Volume{
-		{
-			Name: "redis-conf",
-			VolumeSource: corev1.VolumeSource{
-				ConfigMap: &corev1.ConfigMapVolumeSource{
-					LocalObjectReference: corev1.LocalObjectReference{
-						Name: "redis-conf",
-					},
-				},
-			},
-		},
-	}
-}
-
 func getVolumeMounts(rc *redisv1alpha1.RedisCluster) []corev1.VolumeMount {
 	return []corev1.VolumeMount{
 		{
@@ -90,6 +75,21 @@ func getVolumeMounts(rc *redisv1alpha1.RedisCluster) []corev1.VolumeMount {
 		{
 			Name:      "redis-data",
 			MountPath: "/var/lib/redis",
+		},
+	}
+}
+
+func getVolumes(rc *redisv1alpha1.RedisCluster) []corev1.Volume {
+	return []corev1.Volume{
+		{
+			Name: "redis-conf",
+			VolumeSource: corev1.VolumeSource{
+				ConfigMap: &corev1.ConfigMapVolumeSource{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: generateName(configMapNamePrefix, rc.Name),
+					},
+				},
+			},
 		},
 	}
 }
