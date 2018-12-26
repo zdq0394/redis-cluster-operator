@@ -54,6 +54,8 @@ func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error
 func (h *RedisClusterHandler) Delete(ctx context.Context, key string) error {
 	// Delete Redis Cluster
 	log.Infoln("Delete RedisCluster Here:", key)
+	// No need to do anything, it will be handled by the owner reference done
+	// on the creation.
 	return nil
 }
 

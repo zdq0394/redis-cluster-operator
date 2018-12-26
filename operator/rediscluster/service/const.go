@@ -14,3 +14,8 @@ const (
 	statefulsetNamePrefix = "rcs"
 	configMapNamePrefix   = "rcfg"
 )
+
+var (
+	terminationGracePeriodSeconds int64 = 20
+	storageClassNamePx                  = "px-hdd-ha3"
+)
