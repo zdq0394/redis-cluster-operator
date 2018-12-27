@@ -24,7 +24,7 @@ type Deployment interface {
 	ListDeployments(namespace string) (*appsv1beta2.DeploymentList, error)
 }
 
-// DeploymentService is the service account service implementation using API calls to kubernetes.
+// DeploymentService is the deployment service implementation using API calls to kubernetes.
 type DeploymentService struct {
 	kubeClient kubernetes.Interface
 	logger     log.Logger
