@@ -21,20 +21,6 @@ var (
 	defCategories     = []string{"all"}
 )
 
-// Conf is the configuration required to create a CRD
-type Conf struct {
-	Kind       string
-	NamePlural string
-	Group      string
-	Version    string
-	Scope      apiextensionsv1beta1.ResourceScope
-	Categories []string
-}
-
-func (c *Conf) getName() string {
-	return fmt.Sprintf("%s.%s", c.NamePlural, c.Group)
-}
-
 // Client is the CRD client that knows how to interact with k8s to manage them.
 type Client interface {
 	// EnsurePresent will ensure the the CRD is present, this also means that
