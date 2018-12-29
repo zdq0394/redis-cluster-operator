@@ -6,7 +6,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/zdq0394/redis-cluster-operator/log"
+	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 )
 
 // RBAC is the service that knows how to interact with k8s to manage RBAC related resources.

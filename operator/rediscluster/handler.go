@@ -6,10 +6,10 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/zdq0394/redis-cluster-operator/log"
 	"github.com/zdq0394/redis-cluster-operator/operator"
 	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/service"
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
+	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 

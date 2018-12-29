@@ -1,9 +1,9 @@
 package k8s
 
 import (
-	"github.com/zdq0394/redis-cluster-operator/log"
 	redisclusterv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
 	redisclusterclientset "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned"
+	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
 )

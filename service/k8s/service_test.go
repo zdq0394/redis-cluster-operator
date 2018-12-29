@@ -13,7 +13,7 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes/fake"
 	kubetesting "k8s.io/client-go/testing"
 
-	"github.com/zdq0394/redis-cluster-operator/log"
+	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 )
 
 var (

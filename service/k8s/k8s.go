@@ -4,8 +4,8 @@ import (
 	apiextensionscli "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/zdq0394/redis-cluster-operator/log"
 	redisclusterclientset "github.com/zdq0394/redis-cluster-operator/pkg/client/clientset/versioned"
+	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 )
 
 // Service is the K8s service entrypoint.
