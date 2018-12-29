@@ -45,14 +45,14 @@ func (s *redisKubeClusterManager) WaitRedisStatefulsetPodsRunning(rc *redisv1alp
 	namespace := rc.Namespace
 	var err error
 	var ss *appsv1beta2.StatefulSet
-	<-time.After(time.Duration(6) * time.Minute)
+	<-time.After(time.Duration(3) * time.Minute)
 	timeOut := time.After(time.Duration(12) * time.Minute)
-	t := time.NewTicker(time.Duration(1) * time.Minute)
+	t := time.NewTicker(time.Duration(30) * time.Second)
 	for {
 		select {
 		case <-t.C:
 			ss, err = s.K8SService.GetStatefulSet(namespace, name)
-			if err != nil {
+			if err == nil {
 				fmt.Println("Statefulset Replicas:", ss.Status.Replicas)
 				fmt.Println("Statefulset ReadyReplicas:", ss.Status.ReadyReplicas)
 				fmt.Println("Statefulset CurrentReplicas:", ss.Status.CurrentReplicas)
