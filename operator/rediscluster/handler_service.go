@@ -27,5 +27,9 @@ func (h *RedisClusterHandler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	if err := h.Manager.WaitRedisStatefulsetPodsRunning(rc, labels, ownerRefs); err != nil {
 		return err
 	}
+	// Create Boot pod to create redis cluster
+	if err := h.Manager.EnsureRedisClusterBootPod(rc, labels, ownerRefs); err != nil {
+		return err
+	}
 	return nil
 }

@@ -17,6 +17,7 @@ type RedisClusterManager interface {
 	EnsureRedisHeadlessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
 	EnsureRedisAcessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
 	WaitRedisStatefulsetPodsRunning(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
+	EnsureRedisClusterBootPod(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error
 }
 
 type redisKubeClusterManager struct {
@@ -74,4 +75,9 @@ func (s *redisKubeClusterManager) EnsureRedisHeadlessService(rc *redisv1alpha1.R
 func (s *redisKubeClusterManager) EnsureRedisAcessService(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	svc := generateRedisAccessService(rc, labels, ownerRefs)
 	return s.K8SService.CreateIfNotExistsService(rc.Namespace, svc)
+}
+
+func (s *redisKubeClusterManager) EnsureRedisClusterBootPod(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
+	bootPod := generateRedisBootPod(rc, labels, ownerRefs)
+	return s.K8SService.CreateOrUpdatePod(rc.Namespace, bootPod)
 }

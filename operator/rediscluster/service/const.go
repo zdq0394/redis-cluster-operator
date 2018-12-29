@@ -13,8 +13,13 @@ const (
 	svcAccessNamePrefix   = "rca"
 	statefulsetNamePrefix = "rcs"
 	configMapNamePrefix   = "rcfg"
+	bootPodNamePrefix     = "rcboot"
 )
 
 var (
 	terminationGracePeriodSeconds int64 = 20
+)
+
+const (
+	redisClusterBootImage = "zdq0394/redis-cluster-boot:1.0"
 )
