@@ -25,7 +25,7 @@ func generateRedisBootPod(rc *redisv1alpha1.RedisCluster,
 					Env: []corev1.EnvVar{
 						{
 							Name:  "CLUSTER_DOMAIN",
-							Value: "cluster.local",
+							Value: redisClusterBootClusterDomain,
 						},
 						{
 							Name:  "HEADLESS_SERVICE_NAME",

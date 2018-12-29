@@ -21,5 +21,6 @@ var (
 )
 
 const (
-	redisClusterBootImage = "zdq0394/redis-cluster-boot:1.0"
+	redisClusterBootImage         = "zdq0394/redis-cluster-boot:1.2"
+	redisClusterBootClusterDomain = "cluster.local"
 )
