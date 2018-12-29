@@ -52,7 +52,7 @@ func (s *redisKubeClusterManager) WaitRedisStatefulsetPodsRunning(rc *redisv1alp
 		select {
 		case <-t.C:
 			ss, err = s.K8SService.GetStatefulSet(namespace, name)
-			if err != nil {
+			if err == nil {
 				fmt.Println("Statefulset Replicas:", ss.Status.Replicas)
 				fmt.Println("Statefulset ReadyReplicas:", ss.Status.ReadyReplicas)
 				fmt.Println("Statefulset CurrentReplicas:", ss.Status.CurrentReplicas)
