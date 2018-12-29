@@ -45,6 +45,7 @@ func generateRedisBootPod(rc *redisv1alpha1.RedisCluster,
 					},
 				},
 			},
+			RestartPolicy: corev1.RestartPolicyNever,
 		},
 	}
 }
