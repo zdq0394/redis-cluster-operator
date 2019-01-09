@@ -1,4 +1,4 @@
-FROM docker-registry.saicstack.com/library/ubuntu:16.04
+FROM centos:7.4
 COPY make/release/redisops /opt/redis/operator
 
 WORKDIR /opt/redis
