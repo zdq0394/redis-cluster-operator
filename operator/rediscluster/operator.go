@@ -10,13 +10,13 @@ import (
 )
 
 // Start the Operator
-func Start(development bool, kubeconfig string) error {
+func Start(development bool, kubeconfig string, bootimg string, clusterDomain string) error {
 	kubeClient, redisClient, aeClient, _ := k8sclient.CreateKubernetesClients(development, kubeconfig)
 	logger := log.Base()
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := NewRedisClusterCRD(kubeService)
 
-	mgr := manager.NewRedisClusterManager(kubeService)
+	mgr := manager.NewRedisClusterManager(kubeService, bootimg, clusterDomain)
 	handler := NewRedisClusterHandler(nil, mgr)
 
 	cfg := &controller.Config{

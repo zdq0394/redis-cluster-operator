@@ -6,7 +6,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func generateRedisBootPod(rc *redisv1alpha1.RedisCluster,
+func generateRedisBootPod(bootImage string, clusterDomain string, rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) *corev1.Pod {
 	name := generateName(bootPodNamePrefix, rc.Name)
 	namespace := rc.Namespace
@@ -21,11 +21,11 @@ func generateRedisBootPod(rc *redisv1alpha1.RedisCluster,
 			Containers: []corev1.Container{
 				{
 					Name:  "redis-cluster-boot",
-					Image: redisClusterBootImage,
+					Image: bootImage,
 					Env: []corev1.EnvVar{
 						{
 							Name:  "CLUSTER_DOMAIN",
-							Value: redisClusterBootClusterDomain,
+							Value: clusterDomain,
 						},
 						{
 							Name:  "HEADLESS_SERVICE_NAME",

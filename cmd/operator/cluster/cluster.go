@@ -20,6 +20,18 @@ func init() {
 			Name:   "kubeconfig",
 			Usage:  "kubeconfig of the kubernetes cluster",
 		},
+		cli.StringFlag{
+			EnvVar: "BOOTIMG",
+			Name:   "bootimg",
+			Value:  "zdq0394/redis-cluster-boot:1.2",
+			Usage:  "Redis Cluster Boot Image",
+		},
+		cli.StringFlag{
+			EnvVar: "ClusterDomain",
+			Name:   "clusterdomain",
+			Value:  "cluster.local",
+			Usage:  "Kubernetes cluster domain: e.g. cluster.local",
+		},
 	}
 }
 
@@ -27,7 +39,9 @@ func init() {
 func Action(ctx *cli.Context) {
 	develop := ctx.Bool("develop")
 	kubeconfig := ctx.String("kubeconfig")
-	rediscluster.Start(develop, kubeconfig)
+	bootImage := ctx.String("bootimg")
+	clusterDomain := ctx.String("clusterdomain")
+	rediscluster.Start(develop, kubeconfig, bootImage, clusterDomain)
 }
 
 // Command Cluster Sub Command

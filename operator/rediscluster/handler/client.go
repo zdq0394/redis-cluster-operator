@@ -21,13 +21,23 @@ type RedisClusterManager interface {
 }
 
 type redisKubeClusterManager struct {
-	K8SService k8s.Services
+	BootImg       string
+	ClusterDomain string
+	K8SService    k8s.Services
 }
 
 // NewRedisClusterManager new redis cluster manager.
-func NewRedisClusterManager(s k8s.Services) RedisClusterManager {
+func NewRedisClusterManager(s k8s.Services, bi string, cd string) RedisClusterManager {
+	if bi == "" {
+		bi = redisClusterBootImage
+	}
+	if cd == "" {
+		cd = redisClusterBootClusterDomain
+	}
 	return &redisKubeClusterManager{
-		K8SService: s,
+		K8SService:    s,
+		BootImg:       bi,
+		ClusterDomain: cd,
 	}
 }
 
@@ -78,6 +88,6 @@ func (s *redisKubeClusterManager) EnsureRedisAcessService(rc *redisv1alpha1.Redi
 }
 
 func (s *redisKubeClusterManager) EnsureRedisClusterBootPod(rc *redisv1alpha1.RedisCluster, labels map[string]string, ownerRefs []metav1.OwnerReference) error {
-	bootPod := generateRedisBootPod(rc, labels, ownerRefs)
+	bootPod := generateRedisBootPod(s.BootImg, s.ClusterDomain, rc, labels, ownerRefs)
 	return s.K8SService.CreateOrUpdatePod(rc.Namespace, bootPod)
 }
