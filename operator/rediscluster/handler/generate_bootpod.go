@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"

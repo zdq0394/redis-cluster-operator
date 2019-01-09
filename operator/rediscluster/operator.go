@@ -1,7 +1,7 @@
 package rediscluster
 
 import (
-	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/service"
+	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/handler"
 	k8sclient "github.com/zdq0394/redis-cluster-operator/pkg/k8s"
 	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	"github.com/zdq0394/redis-cluster-operator/pkg/operator"

@@ -1,4 +1,4 @@
-package service
+package handler
 
 const (
 	redisHeadlessPort     = 6379
