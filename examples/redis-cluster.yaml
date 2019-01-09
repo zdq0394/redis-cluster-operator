@@ -16,7 +16,7 @@ spec:
                 cpu: 400m
                 memory: 2048Mi
         storage:
-            size: 8Gi
+            size: 1Gi
             storageClassName: px-hdd-ha3
 
     
