@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: redis-cluster
+  name: redis-cluster
+  namespace: operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis-cluster
+  template:
+    metadata:
+      labels:
+        name: redis-cluster
+    spec:
+      serviceAccountName: redisoperator
+      restartPolicy: Always
+      containers:
+      - image: zdq0394/redis-cluster-operator:0.1
+        name: redis-cluster-operator
+        cmd: ["operator", "cluster"]
+        resources:
+          requests:
+            memory: "2048Mi"
+            cpu: "1000m"
+          limits:
+            memory: "2048Mi"
+            cpu: "1000m"
