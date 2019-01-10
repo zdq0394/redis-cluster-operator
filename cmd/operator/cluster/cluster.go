@@ -32,16 +32,25 @@ func init() {
 			Value:  "cluster.local",
 			Usage:  "Kubernetes cluster domain: e.g. cluster.local",
 		},
+		cli.IntFlag{
+			EnvVar: "ConcurrentWorkers",
+			Name:   "concurrentworkers",
+			Value:  3,
+			Usage:  "Kubernetes cluster domain: e.g. cluster.local",
+		},
 	}
 }
 
 // Action of sub command `cluster`
 func Action(ctx *cli.Context) {
-	develop := ctx.Bool("develop")
-	kubeconfig := ctx.String("kubeconfig")
-	bootImage := ctx.String("bootimg")
-	clusterDomain := ctx.String("clusterdomain")
-	rediscluster.Start(develop, kubeconfig, bootImage, clusterDomain)
+	conf := rediscluster.Config{}
+	conf.Development = ctx.Bool("develop")
+	conf.Kubeconfig = ctx.String("kubeconfig")
+	conf.BootImg = ctx.String("bootimg")
+	conf.ClusterDomain = ctx.String("clusterdomain")
+	conf.ConcurrentWorkers = ctx.Int("concurrentworkers")
+
+	rediscluster.Start(&conf)
 }
 
 // Command Cluster Sub Command

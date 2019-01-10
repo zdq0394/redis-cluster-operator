@@ -9,20 +9,29 @@ import (
 	k8service "github.com/zdq0394/redis-cluster-operator/service/k8s"
 )
 
+type Config struct {
+	Development       bool
+	Kubeconfig        string
+	BootImg           string
+	ClusterDomain     string
+	ConcurrentWorkers int
+}
+
 // Start the Operator
-func Start(development bool, kubeconfig string, bootimg string, clusterDomain string) error {
-	kubeClient, redisClient, aeClient, _ := k8sclient.CreateKubernetesClients(development, kubeconfig)
+func Start(conf *Config) error {
+	kubeClient, redisClient, aeClient, _ := k8sclient.CreateKubernetesClients(conf.Development, conf.Kubeconfig)
 	logger := log.Base()
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := NewRedisClusterCRD(kubeService)
 
-	mgr := manager.NewRedisClusterManager(kubeService, bootimg, clusterDomain)
+	mgr := manager.NewRedisClusterManager(kubeService, conf.BootImg, conf.ClusterDomain)
 	handler := NewRedisClusterHandler(nil, mgr)
 
-	cfg := &controller.Config{
-		Name: "Redis Cluster Controller",
+	controllerCfg := &controller.Config{
+		Name:              "Redis Cluster Controller",
+		ConcurrentWorkers: conf.ConcurrentWorkers,
 	}
-	ctrl := controller.NewSimpleController(cfg, crd, handler)
+	ctrl := controller.NewSimpleController(controllerCfg, crd, handler)
 	optor := operator.NewSimpleOperator(crd, ctrl)
 	stopC := make(chan struct{}, 0)
 	optor.Run(stopC)

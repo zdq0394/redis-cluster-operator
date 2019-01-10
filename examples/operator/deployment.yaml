@@ -21,7 +21,7 @@ spec:
       containers:
       - image: zdq0394/redis-cluster-operator:0.1
         name: redis-cluster-operator
-        command: ["/opt/redis/operator", "cluster", "--bootimg=zdq0394/redis-cluster-boot:1.2", "--clusterdomain=cluster.local"]
+        command: ["/opt/redis/operator", "cluster", "--bootimg=zdq0394/redis-cluster-boot:1.2", "--clusterdomain=cluster.local", "--concurrentworkers=3"]
         resources:
           requests:
             memory: "2048Mi"
