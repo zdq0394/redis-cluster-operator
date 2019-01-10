@@ -997,6 +997,24 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "/85+RWJPFZyRMIgtYs4nlQGWnLY=",
+			"path": "github.com/zdq0394/k8soperator/pkg/operator",
+			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
+			"revisionTime": "2019-01-10T07:52:21Z"
+		},
+		{
+			"checksumSHA1": "w7yQLcY+nPM79FVqw3w4f7TsHDk=",
+			"path": "github.com/zdq0394/k8soperator/pkg/operator/controller",
+			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
+			"revisionTime": "2019-01-10T07:52:21Z"
+		},
+		{
+			"checksumSHA1": "qyat3QymfxB3HuDWkA09TI00JdE=",
+			"path": "github.com/zdq0394/k8soperator/pkg/operator/crd",
+			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
+			"revisionTime": "2019-01-10T07:52:21Z"
+		},
+		{
 			"checksumSHA1": "pCY4YtdNKVBYRbNvODjx8hj0hIs=",
 			"path": "golang.org/x/net/http/httpguts",
 			"revision": "c44066c5c816ec500d459a2a324a753f78531ae0",
