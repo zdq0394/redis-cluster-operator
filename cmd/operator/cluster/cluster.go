@@ -36,7 +36,7 @@ func init() {
 			EnvVar: "ConcurrentWorkers",
 			Name:   "concurrentworkers",
 			Value:  3,
-			Usage:  "Kubernetes cluster domain: e.g. cluster.local",
+			Usage:  "Concurrent goroutines to process crd management",
 		},
 	}
 }
