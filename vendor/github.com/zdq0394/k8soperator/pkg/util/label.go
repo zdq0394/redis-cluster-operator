@@ -1,4 +1,4 @@
-package operator
+package util
 
 // MergeLabels merge all the label maps into one label map
 func MergeLabels(allLabels ...map[string]string) map[string]string {

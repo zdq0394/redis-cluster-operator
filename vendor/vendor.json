@@ -999,20 +999,26 @@
 		{
 			"checksumSHA1": "/85+RWJPFZyRMIgtYs4nlQGWnLY=",
 			"path": "github.com/zdq0394/k8soperator/pkg/operator",
-			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
-			"revisionTime": "2019-01-10T07:52:21Z"
+			"revision": "b7e35558e8424be4db7988bff7b69f1e1c33b9b3",
+			"revisionTime": "2019-01-15T05:56:44Z"
 		},
 		{
 			"checksumSHA1": "w7yQLcY+nPM79FVqw3w4f7TsHDk=",
 			"path": "github.com/zdq0394/k8soperator/pkg/operator/controller",
-			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
-			"revisionTime": "2019-01-10T07:52:21Z"
+			"revision": "b7e35558e8424be4db7988bff7b69f1e1c33b9b3",
+			"revisionTime": "2019-01-15T05:56:44Z"
 		},
 		{
 			"checksumSHA1": "qyat3QymfxB3HuDWkA09TI00JdE=",
 			"path": "github.com/zdq0394/k8soperator/pkg/operator/crd",
-			"revision": "b7a77372d79713df9117378c5f993f55fa9d6ac4",
-			"revisionTime": "2019-01-10T07:52:21Z"
+			"revision": "b7e35558e8424be4db7988bff7b69f1e1c33b9b3",
+			"revisionTime": "2019-01-15T05:56:44Z"
+		},
+		{
+			"checksumSHA1": "qqqr9gEyDDwVeLmjUJ90q8LGh6g=",
+			"path": "github.com/zdq0394/k8soperator/pkg/util",
+			"revision": "b7e35558e8424be4db7988bff7b69f1e1c33b9b3",
+			"revisionTime": "2019-01-15T05:56:44Z"
 		},
 		{
 			"checksumSHA1": "pCY4YtdNKVBYRbNvODjx8hj0hIs=",

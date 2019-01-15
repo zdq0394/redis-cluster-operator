@@ -4,12 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	"github.com/zdq0394/redis-cluster-operator/operator"
+	"github.com/zdq0394/k8soperator/pkg/util"
 	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/handler"
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
 	"github.com/zdq0394/redis-cluster-operator/pkg/log"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -30,7 +29,7 @@ type RedisClusterHandler struct {
 
 // NewRedisClusterHandler create new handler to process the watched RedisClusterCRD
 func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager) *RedisClusterHandler {
-	curLabels := operator.MergeLabels(defaultLabels, labels)
+	curLabels := util.MergeLabels(defaultLabels, labels)
 	return &RedisClusterHandler{
 		Labels:  curLabels,
 		Manager: mgr,
@@ -49,7 +48,7 @@ func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error
 	log.Infof("Handler Create RedisCluster:%s/%s", rc.Namespace, rc.Name)
 	oRefs := h.createOwnerReferences(rc)
 	instanceLabels := h.generateInstanceLabels(rc)
-	labels := operator.MergeLabels(h.Labels, rc.Labels, instanceLabels)
+	labels := util.MergeLabels(h.Labels, rc.Labels, instanceLabels)
 	return h.ensurePresent(rc, labels, oRefs)
 }
 
