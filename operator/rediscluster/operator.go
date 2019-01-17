@@ -25,7 +25,7 @@ func Start(conf *Config) error {
 	crd := NewRedisClusterCRD(kubeService)
 
 	mgr := manager.NewRedisClusterManager(kubeService, conf.BootImg, conf.ClusterDomain)
-	handler := NewRedisClusterHandler(nil, mgr)
+	handler := NewRedisClusterHandler(nil, mgr, logger)
 
 	controllerCfg := &controller.Config{
 		Name:              "Redis Cluster Controller",

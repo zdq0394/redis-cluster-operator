@@ -25,14 +25,16 @@ const (
 type RedisClusterHandler struct {
 	Labels  map[string]string
 	Manager manager.RedisClusterManager
+	logger  log.Logger
 }
 
 // NewRedisClusterHandler create new handler to process the watched RedisClusterCRD
-func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager) *RedisClusterHandler {
+func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager, logger log.Logger) *RedisClusterHandler {
 	curLabels := util.MergeLabels(defaultLabels, labels)
 	return &RedisClusterHandler{
 		Labels:  curLabels,
 		Manager: mgr,
+		logger:  logger,
 	}
 }
 
@@ -40,12 +42,12 @@ func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterMa
 // Create or update a redis cluster as RedisClusterCRD desired.
 func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error {
 	// Create RedisCluster Here...
-	log.Infoln("Create RedisCluster Here...")
+	h.logger.Infoln("Create RedisCluster Here...")
 	rc, ok := obj.(*redisv1alpha1.RedisCluster)
 	if !ok {
 		return fmt.Errorf("Cannot handle redis cluster")
 	}
-	log.Infof("Handler Create RedisCluster:%s/%s", rc.Namespace, rc.Name)
+	h.logger.Infof("Handler Create RedisCluster:%s/%s", rc.Namespace, rc.Name)
 	oRefs := h.createOwnerReferences(rc)
 	instanceLabels := h.generateInstanceLabels(rc)
 	labels := util.MergeLabels(h.Labels, rc.Labels, instanceLabels)
@@ -56,7 +58,7 @@ func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error
 // Destroy the redis cluster.
 func (h *RedisClusterHandler) Delete(ctx context.Context, key string) error {
 	// Delete Redis Cluster
-	log.Infoln("Delete RedisCluster Here:", key)
+	h.logger.Infoln("Delete RedisCluster Here:", key)
 	// No need to do anything, it will be handled by the owner reference done
 	// on the creation.
 	return nil
