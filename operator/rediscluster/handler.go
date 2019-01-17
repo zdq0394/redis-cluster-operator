@@ -20,18 +20,18 @@ const (
 	RedisClusterLabelKey = "rediscluster"
 )
 
-// RedisClusterHandler handles RedisClusterCRD object to create, update or destroy a Redis Cluster
+// Handler handles RedisClusterCRD object to create, update or destroy a Redis Cluster
 // accoring the Action and given RedisClusterCRD object and release all the resources.
-type RedisClusterHandler struct {
+type Handler struct {
 	Labels  map[string]string
 	Manager manager.RedisClusterManager
 	logger  log.Logger
 }
 
 // NewRedisClusterHandler create new handler to process the watched RedisClusterCRD
-func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager, logger log.Logger) *RedisClusterHandler {
+func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager, logger log.Logger) *Handler {
 	curLabels := util.MergeLabels(defaultLabels, labels)
-	return &RedisClusterHandler{
+	return &Handler{
 		Labels:  curLabels,
 		Manager: mgr,
 		logger:  logger,
@@ -40,7 +40,7 @@ func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterMa
 
 // Add process the logic when a RedisClusterCRD object created/updated
 // Create or update a redis cluster as RedisClusterCRD desired.
-func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error {
+func (h *Handler) Add(ctx context.Context, obj runtime.Object) error {
 	// Create RedisCluster Here...
 	h.logger.Infoln("Create RedisCluster Here...")
 	rc, ok := obj.(*redisv1alpha1.RedisCluster)
@@ -56,7 +56,7 @@ func (h *RedisClusterHandler) Add(ctx context.Context, obj runtime.Object) error
 
 // Delete process the logic when a RedisClusterCRD object deleted.
 // Destroy the redis cluster.
-func (h *RedisClusterHandler) Delete(ctx context.Context, key string) error {
+func (h *Handler) Delete(ctx context.Context, key string) error {
 	// Delete Redis Cluster
 	h.logger.Infoln("Delete RedisCluster Here:", key)
 	// No need to do anything, it will be handled by the owner reference done
@@ -64,20 +64,20 @@ func (h *RedisClusterHandler) Delete(ctx context.Context, key string) error {
 	return nil
 }
 
-func (h *RedisClusterHandler) createOwnerReferences(rc *redisv1alpha1.RedisCluster) []metav1.OwnerReference {
+func (h *Handler) createOwnerReferences(rc *redisv1alpha1.RedisCluster) []metav1.OwnerReference {
 	rcvk := redisv1alpha1.VersionKind(redisv1alpha1.RCKind)
 	return []metav1.OwnerReference{
 		*metav1.NewControllerRef(rc, rcvk),
 	}
 }
 
-func (h *RedisClusterHandler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[string]string {
+func (h *Handler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[string]string {
 	return map[string]string{
 		RedisClusterLabelKey: rc.Name,
 	}
 }
 
-func (h *RedisClusterHandler) ensurePresent(rc *redisv1alpha1.RedisCluster,
+func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	// Create Redis ConfigMap
 	if err := h.Manager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
