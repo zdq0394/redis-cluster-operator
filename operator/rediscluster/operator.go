@@ -3,7 +3,7 @@ package rediscluster
 import (
 	"github.com/zdq0394/k8soperator/pkg/operator"
 	"github.com/zdq0394/k8soperator/pkg/operator/controller"
-	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/handler"
+	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/cluster"
 	k8sclient "github.com/zdq0394/redis-cluster-operator/pkg/k8s"
 	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	k8service "github.com/zdq0394/redis-cluster-operator/service/k8s"
