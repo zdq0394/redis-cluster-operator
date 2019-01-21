@@ -19,7 +19,7 @@ spec:
       serviceAccountName: redisoperator
       restartPolicy: Always
       containers:
-      - image: zdq0394/redis-cluster-operator:0.3
+      - image: zdq0394/redis-cluster-operator:0.6
         name: redis-cluster-operator
         command: ["/opt/redis/operator", "cluster", "--bootimg=zdq0394/redis-cluster-boot:1.2", "--clusterdomain=cluster.local", "--concurrentworkers=3"]
         resources:
