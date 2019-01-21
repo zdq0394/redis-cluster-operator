@@ -36,6 +36,7 @@ type RedisCluster struct {
 type RedisClusterSpec struct {
 	Mode  string       `json:"mode"` //cluster/sentinel
 	Redis RedisSetting `json:"redis"`
+        Sentinel SentinelSetting `json:"sentinel"`
 }
 
 // CPUAndMem defines how many cpu and ram the container will request/limit
