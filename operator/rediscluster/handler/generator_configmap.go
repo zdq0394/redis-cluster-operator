@@ -6,16 +6,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func generateRedisConfigMap(rc *redisv1alpha1.RedisCluster,
-	labels map[string]string, ownerRefs []metav1.OwnerReference) *corev1.ConfigMap {
-	name := generateName(configMapNamePrefix, rc.Name)
-	namespace := rc.Namespace
-	conf := `appendonly yes
+const (
+	conf = `appendonly yes
 cluster-enabled yes
 cluster-config-file /var/lib/redis/nodes.conf
 cluster-node-timeout 5000
 dir /var/lib/redis
 port 6379`
+)
+
+func generateRedisConfigMap(rc *redisv1alpha1.RedisCluster,
+	labels map[string]string, ownerRefs []metav1.OwnerReference) *corev1.ConfigMap {
+	name := generateName(configMapNamePrefix, rc.Name)
+	namespace := rc.Namespace
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:            name,

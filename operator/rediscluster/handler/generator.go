@@ -5,11 +5,19 @@ import (
 )
 
 const (
-	redisHeadlessPort     = 6379
-	redisHeadlessPortName = "redis-port"
+	svcHeadlessPort     = 6379
+	svcHeadlessPortName = "headless-port"
 
-	redisAccessPort     = 6379
-	redisAccessPortName = "redis-port"
+	svcAccessPort     = 6379
+	svcAccessPortName = "access-port"
+
+	redisPortName = "redis"
+	redisPort     = 6379
+
+	redisClusterPortName = "cluster"
+	redisClusterPort     = 16379
+
+	graceTime = 30
 )
 
 const (

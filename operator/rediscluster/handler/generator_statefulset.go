@@ -53,8 +53,11 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 								"--protected-mode",
 								"no",
 							},
-							Ports:        getContainerPorts(rc),
-							VolumeMounts: getVolumeMounts(rc),
+							Ports:          getContainerPorts(rc),
+							VolumeMounts:   getVolumeMounts(rc),
+							Resources:      getResources(rc),
+							LivenessProbe:  getLivenessProbe(),
+							ReadinessProbe: getReadinessProbe(),
 						},
 					},
 					Volumes: getVolumes(rc),
@@ -64,6 +67,38 @@ func generateRedisStatefulset(rc *redisv1alpha1.RedisCluster,
 		},
 	}
 	return ss
+}
+
+func getLivenessProbe() *corev1.Probe {
+	return &corev1.Probe{
+		InitialDelaySeconds: graceTime,
+		TimeoutSeconds:      5,
+		Handler: corev1.Handler{
+			Exec: &corev1.ExecAction{
+				Command: []string{
+					"sh",
+					"-c",
+					"redis-cli -h $(hostname) ping",
+				},
+			},
+		},
+	}
+}
+
+func getReadinessProbe() *corev1.Probe {
+	return &corev1.Probe{
+		InitialDelaySeconds: graceTime,
+		TimeoutSeconds:      5,
+		Handler: corev1.Handler{
+			Exec: &corev1.ExecAction{
+				Command: []string{
+					"sh",
+					"-c",
+					"redis-cli -h $(hostname) ping",
+				},
+			},
+		},
+	}
 }
 
 func getVolumeMounts(rc *redisv1alpha1.RedisCluster) []corev1.VolumeMount {
@@ -97,15 +132,42 @@ func getVolumes(rc *redisv1alpha1.RedisCluster) []corev1.Volume {
 func getContainerPorts(rc *redisv1alpha1.RedisCluster) []corev1.ContainerPort {
 	return []corev1.ContainerPort{
 		{
-			Name:          "redis",
-			ContainerPort: 6379,
+			Name:          redisPortName,
+			ContainerPort: redisPort,
 			Protocol:      corev1.ProtocolTCP,
 		},
 		{
-			Name:          "cluster",
-			ContainerPort: 16379,
+			Name:          redisClusterPortName,
+			ContainerPort: redisClusterPort,
 			Protocol:      corev1.ProtocolTCP,
 		},
+	}
+}
+
+func generateResourceList(cpu string, memory string) corev1.ResourceList {
+	resources := corev1.ResourceList{}
+	if cpu != "" {
+		resources[corev1.ResourceCPU], _ = resource.ParseQuantity(cpu)
+	}
+	if memory != "" {
+		resources[corev1.ResourceMemory], _ = resource.ParseQuantity(memory)
+	}
+	return resources
+}
+
+func getRequests(resources redisv1alpha1.RedisResources) corev1.ResourceList {
+	return generateResourceList(resources.Requests.CPU, resources.Requests.Memory)
+}
+
+func getLimits(resources redisv1alpha1.RedisResources) corev1.ResourceList {
+	return generateResourceList(resources.Limits.CPU, resources.Limits.Memory)
+}
+
+func getResources(rc *redisv1alpha1.RedisCluster) corev1.ResourceRequirements {
+	spec := rc.Spec
+	return corev1.ResourceRequirements{
+		Requests: getRequests(spec.Redis.Resources),
+		Limits:   getLimits(spec.Redis.Resources),
 	}
 }
 
