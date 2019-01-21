@@ -3,18 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    name: redis-cluster
-  name: redis-cluster
+    name: redis-cluster-operator
+  name: redis-cluster-operator
   namespace: operator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: redis-cluster
+      name: redis-cluster-operator
   template:
     metadata:
       labels:
-        name: redis-cluster
+        name: redis-cluster-operator
     spec:
       serviceAccountName: redisoperator
       restartPolicy: Always
