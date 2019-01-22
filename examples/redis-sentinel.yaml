@@ -5,7 +5,17 @@ metadata:
     name: myrediscluster
     namespace: redis
 spec:
-    mode: cluster
+    mode: sentinel
+    sentinel:
+        replicas: 6
+        image: registry.docker-cn.com/library/redis:5.0.1
+        resources:
+            requests:
+                cpu: 100m
+                memory: 512Mi
+            limits:
+                cpu: 400m
+                memory: 2048Mi
     redis:
         replicas: 6
         image: registry.docker-cn.com/library/redis:5.0.1

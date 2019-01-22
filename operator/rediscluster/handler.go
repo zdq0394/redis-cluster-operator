@@ -2,7 +2,6 @@ package rediscluster
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/zdq0394/k8soperator/pkg/util"
@@ -20,6 +19,8 @@ var defaultLabels = map[string]string{
 
 const (
 	RedisClusterLabelKey = "rediscluster"
+	RedisClusterCluster  = "cluster"
+	RedisClusterSentinel = "sentinel"
 )
 
 // Handler handles RedisClusterCRD object to create, update or destroy a Redis Cluster
@@ -83,12 +84,12 @@ func (h *Handler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[str
 
 func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
-	if rc.Spec.Mode == "cluster" {
+	if rc.Spec.Mode == RedisClusterCluster {
 		h.ensureClusterPresent(rc, labels, ownerRefs)
-	} else if rc.Spec.Mode == "sentinel" {
+	} else if rc.Spec.Mode == RedisClusterSentinel {
 		h.ensureSentinelPresent(rc, labels, ownerRefs)
 	}
-	return errors.New("Invalid redis cluster mode.")
+	return fmt.Errorf("invalid redis cluster mode:%s. valid modes are:[%s,%s]", rc.Spec.Mode, RedisClusterCluster, RedisClusterSentinel)
 }
 
 func (h *Handler) ensureClusterPresent(rc *redisv1alpha1.RedisCluster,
