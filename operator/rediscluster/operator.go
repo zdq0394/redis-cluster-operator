@@ -3,7 +3,8 @@ package rediscluster
 import (
 	"github.com/zdq0394/k8soperator/pkg/operator"
 	"github.com/zdq0394/k8soperator/pkg/operator/controller"
-	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/handler"
+	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/cluster"
+	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/sentinel"
 	k8sclient "github.com/zdq0394/redis-cluster-operator/pkg/k8s"
 	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	k8service "github.com/zdq0394/redis-cluster-operator/service/k8s"
@@ -24,8 +25,9 @@ func Start(conf *Config) error {
 	kubeService := k8service.New(kubeClient, redisClient, aeClient, logger)
 	crd := NewRedisClusterCRD(kubeService)
 
-	mgr := manager.NewRedisClusterManager(kubeService, conf.BootImg, conf.ClusterDomain)
-	handler := NewRedisClusterHandler(nil, mgr, logger)
+	clusterMgr := cluster.NewRedisClusterManager(kubeService, conf.BootImg, conf.ClusterDomain)
+	sentinelMgr := sentinel.NewRedisSentinelManager(kubeService, conf.ClusterDomain)
+	handler := NewRedisClusterHandler(nil, clusterMgr, sentinelMgr, logger)
 
 	controllerCfg := &controller.Config{
 		Name:              "Redis Cluster Controller",

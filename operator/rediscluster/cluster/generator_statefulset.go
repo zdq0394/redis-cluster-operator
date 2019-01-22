@@ -1,4 +1,4 @@
-package handler
+package cluster
 
 import (
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
@@ -155,11 +155,11 @@ func generateResourceList(cpu string, memory string) corev1.ResourceList {
 	return resources
 }
 
-func getRequests(resources redisv1alpha1.RedisResources) corev1.ResourceList {
+func getRequests(resources redisv1alpha1.Resources) corev1.ResourceList {
 	return generateResourceList(resources.Requests.CPU, resources.Requests.Memory)
 }
 
-func getLimits(resources redisv1alpha1.RedisResources) corev1.ResourceList {
+func getLimits(resources redisv1alpha1.Resources) corev1.ResourceList {
 	return generateResourceList(resources.Limits.CPU, resources.Limits.Memory)
 }
 

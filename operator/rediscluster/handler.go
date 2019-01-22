@@ -2,10 +2,12 @@ package rediscluster
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/zdq0394/k8soperator/pkg/util"
-	manager "github.com/zdq0394/redis-cluster-operator/operator/rediscluster/handler"
+	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/cluster"
+	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/sentinel"
 	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
 	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,18 +25,20 @@ const (
 // Handler handles RedisClusterCRD object to create, update or destroy a Redis Cluster
 // accoring the Action and given RedisClusterCRD object and release all the resources.
 type Handler struct {
-	Labels  map[string]string
-	Manager manager.RedisClusterManager
-	logger  log.Logger
+	Labels          map[string]string
+	ClusterManager  cluster.RedisClusterManager
+	SentinelManager sentinel.RedisSentinelManager
+	logger          log.Logger
 }
 
 // NewRedisClusterHandler create new handler to process the watched RedisClusterCRD
-func NewRedisClusterHandler(labels map[string]string, mgr manager.RedisClusterManager, logger log.Logger) *Handler {
+func NewRedisClusterHandler(labels map[string]string, clusterMgr cluster.RedisClusterManager, sentinelMgr sentinel.RedisSentinelManager, logger log.Logger) *Handler {
 	curLabels := util.MergeLabels(defaultLabels, labels)
 	return &Handler{
-		Labels:  curLabels,
-		Manager: mgr,
-		logger:  logger,
+		Labels:          curLabels,
+		ClusterManager:  clusterMgr,
+		SentinelManager: sentinelMgr,
+		logger:          logger,
 	}
 }
 
@@ -79,28 +83,52 @@ func (h *Handler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[str
 
 func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
+	if rc.Spec.Mode == "cluster" {
+		h.ensureClusterPresent(rc, labels, ownerRefs)
+	} else if rc.Spec.Mode == "sentinel" {
+		h.ensureSentinelPresent(rc, labels, ownerRefs)
+	}
+	return errors.New("Invalid redis cluster mode.")
+}
+
+func (h *Handler) ensureClusterPresent(rc *redisv1alpha1.RedisCluster,
+	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	// Create Redis ConfigMap
-	if err := h.Manager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	// Create Redis Headless service for statefulset
-	if err := h.Manager.EnsureRedisHeadlessService(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.EnsureRedisHeadlessService(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	// Create Redis Statefulset
-	if err := h.Manager.EnsureRedisStatefulset(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.EnsureRedisStatefulset(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	// Create Redis Access Service
-	if err := h.Manager.EnsureRedisAcessService(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.EnsureRedisAcessService(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	// Wait Redis Statefulset Pods is Running
-	if err := h.Manager.WaitRedisStatefulsetPodsRunning(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.WaitRedisStatefulsetPodsRunning(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	// Create Boot pod to create redis cluster
-	if err := h.Manager.EnsureRedisClusterBootPod(rc, labels, ownerRefs); err != nil {
+	if err := h.ClusterManager.EnsureRedisClusterBootPod(rc, labels, ownerRefs); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (h *Handler) ensureSentinelPresent(rc *redisv1alpha1.RedisCluster,
+	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
+	if err := h.SentinelManager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
+		return err
+	}
+	if err := h.SentinelManager.EnsureRedisHeadlessService(rc, labels, ownerRefs); err != nil {
+		return err
+	}
+	if err := h.SentinelManager.EnsureRedisStatefulset(rc, labels, ownerRefs); err != nil {
 		return err
 	}
 	return nil
