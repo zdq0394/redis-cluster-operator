@@ -85,9 +85,9 @@ func (h *Handler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[str
 func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	if rc.Spec.Mode == RedisClusterCluster {
-		h.ensureClusterPresent(rc, labels, ownerRefs)
+		return h.ensureClusterPresent(rc, labels, ownerRefs)
 	} else if rc.Spec.Mode == RedisClusterSentinel {
-		h.ensureSentinelPresent(rc, labels, ownerRefs)
+		return h.ensureSentinelPresent(rc, labels, ownerRefs)
 	}
 	return fmt.Errorf("invalid redis cluster mode:%s. valid modes are:[%s,%s]", rc.Spec.Mode, RedisClusterCluster, RedisClusterSentinel)
 }
