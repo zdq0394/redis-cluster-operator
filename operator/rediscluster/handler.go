@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/zdq0394/k8soperator/pkg/log"
 	"github.com/zdq0394/k8soperator/pkg/util"
 	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/cluster"
 	"github.com/zdq0394/redis-cluster-operator/operator/rediscluster/sentinel"
-	redisv1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
-	"github.com/zdq0394/redis-cluster-operator/pkg/log"
+	v1alpha1 "github.com/zdq0394/redis-cluster-operator/pkg/apis/redis/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -48,7 +48,7 @@ func NewRedisClusterHandler(labels map[string]string, clusterMgr cluster.RedisCl
 func (h *Handler) Add(ctx context.Context, obj runtime.Object) error {
 	// Create RedisCluster Here...
 	h.logger.Infoln("Create RedisCluster Here...")
-	rc, ok := obj.(*redisv1alpha1.RedisCluster)
+	rc, ok := obj.(*v1alpha1.RedisCluster)
 	if !ok {
 		return fmt.Errorf("Cannot handle redis cluster")
 	}
@@ -69,20 +69,20 @@ func (h *Handler) Delete(ctx context.Context, key string) error {
 	return nil
 }
 
-func (h *Handler) createOwnerReferences(rc *redisv1alpha1.RedisCluster) []metav1.OwnerReference {
-	rcvk := redisv1alpha1.VersionKind(redisv1alpha1.RCKind)
+func (h *Handler) createOwnerReferences(rc *v1alpha1.RedisCluster) []metav1.OwnerReference {
+	rcvk := v1alpha1.VersionKind(v1alpha1.RCKind)
 	return []metav1.OwnerReference{
 		*metav1.NewControllerRef(rc, rcvk),
 	}
 }
 
-func (h *Handler) generateInstanceLabels(rc *redisv1alpha1.RedisCluster) map[string]string {
+func (h *Handler) generateInstanceLabels(rc *v1alpha1.RedisCluster) map[string]string {
 	return map[string]string{
 		RedisClusterLabelKey: rc.Name,
 	}
 }
 
-func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
+func (h *Handler) ensurePresent(rc *v1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	if rc.Spec.Mode == RedisClusterCluster {
 		return h.ensureClusterPresent(rc, labels, ownerRefs)
@@ -92,7 +92,7 @@ func (h *Handler) ensurePresent(rc *redisv1alpha1.RedisCluster,
 	return fmt.Errorf("invalid redis cluster mode:%s. valid modes are:[%s,%s]", rc.Spec.Mode, RedisClusterCluster, RedisClusterSentinel)
 }
 
-func (h *Handler) ensureClusterPresent(rc *redisv1alpha1.RedisCluster,
+func (h *Handler) ensureClusterPresent(rc *v1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	// Create Redis ConfigMap
 	if err := h.ClusterManager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
@@ -121,7 +121,7 @@ func (h *Handler) ensureClusterPresent(rc *redisv1alpha1.RedisCluster,
 	return nil
 }
 
-func (h *Handler) ensureSentinelPresent(rc *redisv1alpha1.RedisCluster,
+func (h *Handler) ensureSentinelPresent(rc *v1alpha1.RedisCluster,
 	labels map[string]string, ownerRefs []metav1.OwnerReference) error {
 	if err := h.SentinelManager.EnsureRedisConfigMap(rc, labels, ownerRefs); err != nil {
 		return err

@@ -1,8 +1,8 @@
 package k8s
 
 import (
+	"github.com/zdq0394/k8soperator/pkg/log"
 	"github.com/zdq0394/k8soperator/pkg/operator/crd"
-	"github.com/zdq0394/redis-cluster-operator/pkg/log"
 	apiextensionscli "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 )
 

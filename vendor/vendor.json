@@ -997,6 +997,18 @@
 			"revision": ""
 		},
 		{
+			"checksumSHA1": "oe0MT65TiAN/ZxJLspuhy4694xc=",
+			"path": "github.com/zdq0394/k8soperator/pkg/k8s",
+			"revision": "b85853e194f1fc42b2b52aa6df68ff8a7b0e171b",
+			"revisionTime": "2019-02-21T05:58:06Z"
+		},
+		{
+			"checksumSHA1": "BVTNk14we8LxOjtaBsAsK9Ij6kA=",
+			"path": "github.com/zdq0394/k8soperator/pkg/log",
+			"revision": "b85853e194f1fc42b2b52aa6df68ff8a7b0e171b",
+			"revisionTime": "2019-02-21T05:58:06Z"
+		},
+		{
 			"checksumSHA1": "/85+RWJPFZyRMIgtYs4nlQGWnLY=",
 			"path": "github.com/zdq0394/k8soperator/pkg/operator",
 			"revision": "b7e35558e8424be4db7988bff7b69f1e1c33b9b3",
